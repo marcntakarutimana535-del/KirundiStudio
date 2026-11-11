@@ -16,6 +16,17 @@ android {
         versionName = "0.1.0"
     }
 
+    // Clé de TEST fixe : permet de mettre à jour l'application sans la désinstaller.
+    // Ce n'est pas une clé de publication finale.
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

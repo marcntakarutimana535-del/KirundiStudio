@@ -1,10 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">KIRUNDI VOICE STUDIO</string>
+
+    <string name="tab_studio">Studio</string>
+    <string name="tab_probe">Test micro</string>
+
+    <!-- Test micro (étape 1) -->
     <string name="step1_title">Étape 1 : détection des micros</string>
     <string name="step1_hint">Pendant le test réel, parlez normalement près du micro (environ 10 secondes).</string>
     <string name="btn_scan">Actualiser la liste des micros</string>
     <string name="btn_probe">Lancer le test réel du micro</string>
     <string name="btn_copy">Copier le rapport</string>
     <string name="status_running">Test en cours : %1$s</string>
+
+    <!-- Studio (étape 2) -->
+    <string name="label_format">Format d\'enregistrement</string>
+    <string name="state_recording">● ENREGISTREMENT EN COURS</string>
+    <string name="state_paused">⏸ EN PAUSE (rien n\'est écrit)</string>
+    <string name="clip_detected">SATURATION détectée : %1$d événement(s)</string>
+    <string name="clip_none">Aucune saturation détectée</string>
+    <string name="btn_record">ENREGISTRER</string>
+    <string name="btn_pause">PAUSE</string>
+    <string name="btn_resume">REPRENDRE</string>
+    <string name="btn_stop">ARRÊTER</string>
+    <string name="label_filename">Nom du fichier (facultatif)</string>
+    <string name="label_source">Source audio</string>
+    <string name="src_unprocessed">UNPROCESSED : sans traitement (recommandée)</string>
+    <string name="src_voicerec">VOICE_RECOGNITION</string>
+    <string name="src_mic">MIC : source standard</string>
+    <string name="label_recordings">Enregistrements</string>
+    <string name="none_yet">Aucun enregistrement pour l\'instant.</string>
+    <string name="btn_export">Exporter</string>
+    <string name="btn_delete">Supprimer</string>
+    <string name="confirm_delete_title">Supprimer cet enregistrement ?</string>
+    <string name="confirm_delete_text">Le fichier %1$s sera supprimé définitivement de l\'application. Exportez-le d\'abord si vous voulez le garder.</string>
+    <string name="btn_confirm_delete">Supprimer définitivement</string>
+    <string name="btn_cancel">Annuler</string>
 </resources>
