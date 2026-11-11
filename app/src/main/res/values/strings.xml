@@ -8,6 +8,7 @@
     <string name="tab_pretest">Pré-test</string>
     <string name="tab_library">Bibliothèque</string>
     <string name="tab_player">Lecteur</string>
+    <string name="tab_export">Export</string>
     <string name="tab_projects">Projets</string>
 
     <!-- Pré-test (étape 4) -->

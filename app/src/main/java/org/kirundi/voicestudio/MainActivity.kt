@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.kirundi.voicestudio.ui.AnalysisScreen
+import org.kirundi.voicestudio.ui.ExportScreen
 import org.kirundi.voicestudio.ui.LibraryScreen
 import org.kirundi.voicestudio.ui.PlayerScreen
 import org.kirundi.voicestudio.ui.ProjectsScreen
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
                         stringResource(R.string.tab_analysis),
                         stringResource(R.string.tab_library),
                         stringResource(R.string.tab_player),
+                        stringResource(R.string.tab_export),
                         stringResource(R.string.tab_projects),
                         stringResource(R.string.tab_probe)
                     )
@@ -64,7 +66,8 @@ class MainActivity : ComponentActivity() {
                             2 -> AnalysisScreen()
                             3 -> LibraryScreen()
                             4 -> PlayerScreen()
-                            5 -> ProjectsScreen()
+                            5 -> ExportScreen()
+                            6 -> ProjectsScreen()
                             else -> ProbeScreen()
                         }
                     }
