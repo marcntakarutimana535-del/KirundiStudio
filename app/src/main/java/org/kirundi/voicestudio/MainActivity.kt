@@ -25,6 +25,7 @@ import org.kirundi.voicestudio.ui.LibraryScreen
 import org.kirundi.voicestudio.ui.PlayerScreen
 import org.kirundi.voicestudio.ui.ProfileScreen
 import org.kirundi.voicestudio.ui.ProjectsScreen
+import org.kirundi.voicestudio.ui.SettingsScreen
 import org.kirundi.voicestudio.ui.PreTestScreen
 import org.kirundi.voicestudio.ui.ProbeScreen
 import org.kirundi.voicestudio.ui.StudioScreen
@@ -49,6 +50,7 @@ class MainActivity : ComponentActivity() {
                         stringResource(R.string.tab_export),
                         stringResource(R.string.tab_profile),
                         stringResource(R.string.tab_projects),
+                        stringResource(R.string.tab_settings),
                         stringResource(R.string.tab_probe)
                     )
                     Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
@@ -71,6 +73,7 @@ class MainActivity : ComponentActivity() {
                             5 -> ExportScreen()
                             6 -> ProfileScreen()
                             7 -> ProjectsScreen()
+                            8 -> SettingsScreen()
                             else -> ProbeScreen()
                         }
                     }

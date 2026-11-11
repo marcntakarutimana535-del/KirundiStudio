@@ -6,6 +6,7 @@ import org.kirundi.voicestudio.data.db.RecordingEntity
 import org.kirundi.voicestudio.data.db.dbOrDash
 import org.kirundi.voicestudio.data.files.RecordingStore
 import org.kirundi.voicestudio.data.files.sha256Hex
+import org.kirundi.voicestudio.data.settings.SettingsStore
 import org.kirundi.voicestudio.domain.verdict.PreTestEvaluator
 import org.kirundi.voicestudio.domain.verdict.Status
 import java.io.File
@@ -26,14 +27,10 @@ object VoicesProfile {
 
 /** Réglage : accepter une capture 16 bits natifs (à valider avec le client). */
 object ProfilePrefs {
-    private const val FILE = "kvs_prefs"
-    private const val KEY = "accept16"
-
-    fun accept16(context: Context): Boolean =
-        context.getSharedPreferences(FILE, Context.MODE_PRIVATE).getBoolean(KEY, false)
+    fun accept16(context: Context): Boolean = SettingsStore.read(context).accept16
 
     fun setAccept16(context: Context, value: Boolean) {
-        context.getSharedPreferences(FILE, Context.MODE_PRIVATE).edit().putBoolean(KEY, value).apply()
+        SettingsStore.save(context, SettingsStore.read(context).copy(accept16 = value))
     }
 }
 

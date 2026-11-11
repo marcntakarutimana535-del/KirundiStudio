@@ -41,6 +41,7 @@ import org.kirundi.voicestudio.R
 import org.kirundi.voicestudio.audio.analysis.AudioAnalyzer
 import org.kirundi.voicestudio.audio.analysis.FileAnalysis
 import org.kirundi.voicestudio.data.db.Db
+import org.kirundi.voicestudio.data.settings.SettingsStore
 import org.kirundi.voicestudio.data.db.MeasureEntity
 import org.kirundi.voicestudio.data.db.finiteOrNull
 import org.kirundi.voicestudio.data.files.RecordingStore
@@ -135,10 +136,11 @@ fun AnalysisScreen() {
     var analysis by remember { mutableStateOf<FileAnalysis?>(null) }
     var running by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf("") }
-    var method by remember { mutableStateOf(NoiseMethod.WINDOW_MEDIAN) }
-    var target by remember { mutableStateOf(-60.0) }
-    var voiceMargin by remember { mutableStateOf(12.0) }
-    var silenceMargin by remember { mutableStateOf(6.0) }
+    val startSettings = remember { SettingsStore.read(context) }
+    var method by remember { mutableStateOf(NoiseMethod.values()[startSettings.noiseMethod]) }
+    var target by remember { mutableStateOf(startSettings.targetDb) }
+    var voiceMargin by remember { mutableStateOf(startSettings.voiceMarginDb) }
+    var silenceMargin by remember { mutableStateOf(startSettings.silenceMarginDb) }
 
     fun runAnalysis() {
         val f = selected ?: return

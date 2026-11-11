@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.kirundi.voicestudio.data.db.Db
+import org.kirundi.voicestudio.data.settings.SettingsStore
 import org.kirundi.voicestudio.data.db.DbSnapshot
 import org.kirundi.voicestudio.data.db.SessionPrefs
 import org.kirundi.voicestudio.data.db.formatDateTime
@@ -52,7 +53,7 @@ fun ExportScreen() {
     var snap by remember { mutableStateOf<DbSnapshot?>(null) }
     var scope by remember { mutableStateOf(UNCLASSIFIED) }
     var excluded by remember { mutableStateOf(setOf<String>()) }
-    var template by remember { mutableStateOf("{projet}_{participant}_{date}_{n}") }
+    var template by remember { mutableStateOf(SettingsStore.read(context).nameTemplate) }
     var convert24 by remember { mutableStateOf(false) }
     var withPdf by remember { mutableStateOf(true) }
     var running by remember { mutableStateOf(false) }

@@ -51,6 +51,7 @@ import org.kirundi.voicestudio.audio.capture.RecState
 import org.kirundi.voicestudio.audio.capture.Recorder
 import org.kirundi.voicestudio.audio.capture.formatDb
 import org.kirundi.voicestudio.data.db.Db
+import org.kirundi.voicestudio.data.settings.SettingsStore
 import org.kirundi.voicestudio.data.db.SessionLabels
 import org.kirundi.voicestudio.data.files.RecordingStore
 import java.io.File
@@ -77,7 +78,7 @@ fun StudioScreen(onBusyChange: (Boolean) -> Unit) {
     var recState by remember { mutableStateOf(RecState.IDLE) }
     var level by remember { mutableStateOf(LevelInfo.EMPTY) }
     var fileName by remember { mutableStateOf("") }
-    var sourceIndex by remember { mutableStateOf(0) }
+    var sourceIndex by remember { mutableStateOf(SettingsStore.read(context).defaultSource) }
     var message by remember { mutableStateOf("") }
     var files by remember { mutableStateOf(RecordingStore.list(context)) }
     var toDelete by remember { mutableStateOf<File?>(null) }

@@ -53,6 +53,7 @@ import org.kirundi.voicestudio.audio.capture.Recorder
 import org.kirundi.voicestudio.audio.capture.formatDb
 import org.kirundi.voicestudio.audio.pretest.PreTestRunner
 import org.kirundi.voicestudio.data.db.Db
+import org.kirundi.voicestudio.data.settings.SettingsStore
 import org.kirundi.voicestudio.data.db.MeasureEntity
 import org.kirundi.voicestudio.data.files.RecordingStore
 import org.kirundi.voicestudio.domain.verdict.AnalysisSettings
@@ -145,7 +146,7 @@ fun PreTestScreen(onBusyChange: (Boolean) -> Unit) {
     var silenceSeconds by remember { mutableStateOf(20) }
     var sourceIndex by remember { mutableStateOf(0) }
     var method by remember { mutableStateOf(NoiseMethod.GLOBAL) }
-    var accept16 by remember { mutableStateOf(false) }
+    var accept16 by remember { mutableStateOf(SettingsStore.read(context).accept16) }
     var level by remember { mutableStateOf(LevelInfo.EMPTY) }
     var message by remember { mutableStateOf("") }
     var micRes by remember { mutableStateOf<StepResult?>(null) }
