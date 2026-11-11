@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KIRUNDI VOICE STUDIO</string>
+    <string name="step0_ok">Étape 0 : le projet se compile et s\'installe.</string>
+    <string name="device_label">Appareil : %1$s</string>
+    <string name="android_label">Android %1$s (API %2$d)</string>
+</resources>
