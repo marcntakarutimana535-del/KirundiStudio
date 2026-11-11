@@ -38,6 +38,9 @@ import org.kirundi.voicestudio.data.db.DbSnapshot
 import org.kirundi.voicestudio.data.db.SessionPrefs
 import org.kirundi.voicestudio.data.db.formatDateTime
 import org.kirundi.voicestudio.data.db.formatDur
+import org.kirundi.voicestudio.domain.profile.ProfileChecker
+import org.kirundi.voicestudio.domain.profile.ProfilePrefs
+import org.kirundi.voicestudio.domain.verdict.Status
 import org.kirundi.voicestudio.export.ExportService
 
 private const val UNCLASSIFIED = -1L
@@ -56,6 +59,8 @@ fun ExportScreen() {
     var progress by remember { mutableStateOf("") }
     var result by remember { mutableStateOf<List<String>>(emptyList()) }
     var finalOk by remember { mutableStateOf<Boolean?>(null) }
+    var verdicts by remember { mutableStateOf<Map<String, Status>>(emptyMap()) }
+    var verdictsFor by remember { mutableStateOf("") }
 
     fun reload(initial: Boolean) {
         Db.loadAll(context) {
@@ -74,6 +79,28 @@ fun ExportScreen() {
     } ?: emptyList()
     val chosen = inScope.filter { it.fileName !in excluded }
 
+    val verdictKey = chosen.joinToString("|") { it.fileName } + "#" + convert24
+    LaunchedEffect(verdictKey) {
+        val d = snap
+        val list = chosen
+        val d24 = convert24
+        val key = verdictKey
+        if (d != null && list.isNotEmpty()) {
+            val a16 = ProfilePrefs.accept16(context)
+            Thread {
+                val map = HashMap<String, Status>()
+                for (rec in list) {
+                    val m = d.measures.firstOrNull { it.kind == "analyse" && it.fileName == rec.fileName }
+                    map[rec.fileName] = ProfileChecker.check(context, rec, m, d24, a16).overall
+                }
+                handler.post {
+                    verdicts = map
+                    verdictsFor = key
+                }
+            }.start()
+        }
+    }
+
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
         val d = snap
         if (uri == null || d == null) {
@@ -89,7 +116,7 @@ fun ExportScreen() {
             val pdf = withPdf
             Thread {
                 val run = try {
-                    ExportService.run(context, uri, d, list, sessionId, tpl, c24, pdf) { p ->
+                    ExportService.run(context, uri, d, list, sessionId, tpl, c24, pdf, ProfilePrefs.accept16(context)) { p ->
                         handler.post { progress = p }
                     }
                 } catch (e: Exception) {
@@ -166,7 +193,8 @@ fun ExportScreen() {
                         Text(rec.fileName, fontSize = 13.sp)
                         Text(
                             "${formatDateTime(rec.createdAt)}  ${formatDur(rec.durationSec)}  ${rec.bits} bits  " +
-                                (if (m == null) "NON ANALYSÉ (contrôle incomplet)" else "analyse : ${m.status}"),
+                                (if (m == null) "NON ANALYSÉ (contrôle incomplet)" else "analyse : ${m.status}") +
+                                (if (verdictsFor == verdictKey && verdicts[rec.fileName] != null) "\nProfil Voices.com : ${verdicts[rec.fileName]!!.label}" else ""),
                             fontFamily = FontFamily.Monospace,
                             fontSize = 10.sp
                         )
@@ -221,6 +249,14 @@ fun ExportScreen() {
                 Text("Créer le rapport PDF", fontSize = 13.sp)
             }
 
+            if (verdictsFor == verdictKey && verdicts.values.any { it != Status.OK }) {
+                Text(
+                    "Certains fichiers ne sont pas CONFORMES au profil Voices.com (voir l'onglet Profil). " +
+                        "L'export reste possible : le rapport PDF détaille chaque contrôle.",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
             Button(
                 enabled = !running && chosen.isNotEmpty() && template.isNotBlank(),
                 onClick = { launcher.launch(null) }

@@ -23,6 +23,7 @@ import org.kirundi.voicestudio.ui.AnalysisScreen
 import org.kirundi.voicestudio.ui.ExportScreen
 import org.kirundi.voicestudio.ui.LibraryScreen
 import org.kirundi.voicestudio.ui.PlayerScreen
+import org.kirundi.voicestudio.ui.ProfileScreen
 import org.kirundi.voicestudio.ui.ProjectsScreen
 import org.kirundi.voicestudio.ui.PreTestScreen
 import org.kirundi.voicestudio.ui.ProbeScreen
@@ -46,6 +47,7 @@ class MainActivity : ComponentActivity() {
                         stringResource(R.string.tab_library),
                         stringResource(R.string.tab_player),
                         stringResource(R.string.tab_export),
+                        stringResource(R.string.tab_profile),
                         stringResource(R.string.tab_projects),
                         stringResource(R.string.tab_probe)
                     )
@@ -67,7 +69,8 @@ class MainActivity : ComponentActivity() {
                             3 -> LibraryScreen()
                             4 -> PlayerScreen()
                             5 -> ExportScreen()
-                            6 -> ProjectsScreen()
+                            6 -> ProfileScreen()
+                            7 -> ProjectsScreen()
                             else -> ProbeScreen()
                         }
                     }

@@ -13,6 +13,8 @@ import org.kirundi.voicestudio.data.db.formatDateTime
 import org.kirundi.voicestudio.data.db.formatDur
 import org.kirundi.voicestudio.data.files.RecordingStore
 import org.kirundi.voicestudio.data.files.sha256Hex
+import org.kirundi.voicestudio.domain.profile.ProfileChecker
+import org.kirundi.voicestudio.domain.profile.ProfileReport
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -43,6 +45,7 @@ object ExportService {
         template: String,
         convert24: Boolean,
         withPdf: Boolean,
+        accept16: Boolean,
         onProgress: (String) -> Unit
     ): ExportRun {
         val messages = ArrayList<String>()
@@ -173,13 +176,19 @@ object ExportService {
         }
 
         if (withPdf) {
+            onProgress("Contrôle du profil Voices.com...")
+            val profiles = HashMap<String, ProfileReport>()
+            for (d in done) {
+                val m = snap.measures.firstOrNull { it.kind == "analyse" && it.fileName == d.rec.fileName }
+                profiles[d.rec.fileName] = ProfileChecker.check(context, d.rec, m, convert24, accept16)
+            }
             onProgress("Création du rapport PDF...")
             try {
                 val pdf = DocumentsContract.createDocument(resolver, folder, "application/pdf", "RAPPORT_$folderName.pdf")
                 if (pdf != null) {
                     val out = resolver.openOutputStream(pdf)
                     if (out != null) {
-                        out.use { buildReport(snap, project?.code, project?.name, participant?.code, session?.startedAt, convert24, done.map { Triple(it.rec, it.name, it.hash) to (it.ok) }).save(it) }
+                        out.use { buildReport(snap, project?.code, project?.name, participant?.code, session?.startedAt, convert24, done.map { Triple(it.rec, it.name, it.hash) to (it.ok) }, profiles).save(it) }
                         messages.add("Rapport PDF écrit : RAPPORT_$folderName.pdf")
                     } else {
                         allOk = false
@@ -201,7 +210,8 @@ object ExportService {
         participantCode: String?,
         sessionStart: Long?,
         convert24: Boolean,
-        items: List<Pair<Triple<RecordingEntity, String, String?>, Boolean>>
+        items: List<Pair<Triple<RecordingEntity, String, String?>, Boolean>>,
+        profiles: Map<String, ProfileReport>
     ): PdfReport {
         val r = PdfReport()
         r.title("KIRUNDI VOICE STUDIO - Rapport d'export")
@@ -238,6 +248,11 @@ object ExportService {
             } else {
                 r.line("Analyse du ${formatDateTime(m.createdAt)} : statut ${m.status}")
                 r.line("Bruit de fond : ${dbOrDash(m.noiseDb)}   RSB : ${m.snrDb?.let { String.format(Locale.US, "%.1f dB", it) } ?: "n/d"}   Méthode : ${m.method}")
+            }
+            val pr = profiles[rec.fileName]
+            if (pr != null) {
+                r.boldLine("Profil Voices.com AI0117 : ${pr.overall.label}")
+                for (c in pr.checks) r.line("- ${c.title} : ${c.status.label}. ${c.detail}")
             }
             r.line("SHA-256 du fichier livré :")
             r.monoLine(t.third ?: "non disponible")
