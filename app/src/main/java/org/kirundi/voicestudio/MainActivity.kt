@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.kirundi.voicestudio.ui.AnalysisScreen
 import org.kirundi.voicestudio.ui.LibraryScreen
+import org.kirundi.voicestudio.ui.PlayerScreen
 import org.kirundi.voicestudio.ui.ProjectsScreen
 import org.kirundi.voicestudio.ui.PreTestScreen
 import org.kirundi.voicestudio.ui.ProbeScreen
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
                         stringResource(R.string.tab_pretest),
                         stringResource(R.string.tab_analysis),
                         stringResource(R.string.tab_library),
+                        stringResource(R.string.tab_player),
                         stringResource(R.string.tab_projects),
                         stringResource(R.string.tab_probe)
                     )
@@ -61,7 +63,8 @@ class MainActivity : ComponentActivity() {
                             1 -> PreTestScreen(onBusyChange = { busy = it })
                             2 -> AnalysisScreen()
                             3 -> LibraryScreen()
-                            4 -> ProjectsScreen()
+                            4 -> PlayerScreen()
+                            5 -> ProjectsScreen()
                             else -> ProbeScreen()
                         }
                     }
