@@ -40,6 +40,9 @@ import androidx.compose.ui.unit.sp
 import org.kirundi.voicestudio.R
 import org.kirundi.voicestudio.audio.analysis.AudioAnalyzer
 import org.kirundi.voicestudio.audio.analysis.FileAnalysis
+import org.kirundi.voicestudio.data.db.Db
+import org.kirundi.voicestudio.data.db.MeasureEntity
+import org.kirundi.voicestudio.data.db.finiteOrNull
 import org.kirundi.voicestudio.data.files.RecordingStore
 import org.kirundi.voicestudio.domain.verdict.AnalysisSettings
 import org.kirundi.voicestudio.domain.verdict.NoiseAssessment
@@ -143,11 +146,32 @@ fun AnalysisScreen() {
         running = true
         error = ""
         analysis = null
+        val snapSettings = AnalysisSettings(method, target, voiceMargin, silenceMargin)
         Thread {
             var result: FileAnalysis? = null
             var err = ""
             try {
-                result = AudioAnalyzer.analyze(f)
+                val ana = AudioAnalyzer.analyze(f)
+                result = ana
+                val ev = NoiseEvaluator.evaluate(
+                    ana.rmsDb, ana.peakDb, ana.globalRmsDb, ana.seconds, ana.clipEvents, ana.windowSeconds, snapSettings
+                )
+                Db.run(context, { dao ->
+                    dao.insertMeasure(
+                        MeasureEntity(
+                            fileName = f.name,
+                            createdAt = System.currentTimeMillis(),
+                            kind = "analyse",
+                            method = snapSettings.method.label,
+                            noiseDb = finiteOrNull(ev.noiseValueDb),
+                            snrDb = finiteOrNull(ev.snrDb),
+                            rmsDb = finiteOrNull(ana.globalRmsDb),
+                            peakDb = finiteOrNull(ana.globalPeakDb),
+                            status = ev.status.label,
+                            summary = ev.reasons.joinToString(" | ")
+                        )
+                    )
+                }) { }
             } catch (e: Exception) {
                 err = e.message ?: e.javaClass.simpleName
             }

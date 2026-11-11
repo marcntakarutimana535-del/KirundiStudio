@@ -364,6 +364,9 @@ class Recorder(private val context: Context) {
                 json.put("android", "${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})")
                 json.put("rms_global", formatDb(rmsGlobal))
                 json.put("peak_max", formatDb(db(peakMax)))
+                if (!rmsGlobal.isInfinite() && !rmsGlobal.isNaN()) json.put("rms_global_db", rmsGlobal)
+                val peakDbValue = db(peakMax)
+                if (!peakDbValue.isInfinite() && !peakDbValue.isNaN()) json.put("peak_max_db", peakDbValue)
                 json.put("saturations_evenements", clipEvents)
                 json.put("sha256", hash)
                 json.put(

@@ -52,6 +52,8 @@ import org.kirundi.voicestudio.audio.capture.LevelInfo
 import org.kirundi.voicestudio.audio.capture.Recorder
 import org.kirundi.voicestudio.audio.capture.formatDb
 import org.kirundi.voicestudio.audio.pretest.PreTestRunner
+import org.kirundi.voicestudio.data.db.Db
+import org.kirundi.voicestudio.data.db.MeasureEntity
 import org.kirundi.voicestudio.data.files.RecordingStore
 import org.kirundi.voicestudio.domain.verdict.AnalysisSettings
 import org.kirundi.voicestudio.domain.verdict.NoiseEvaluator
@@ -187,6 +189,24 @@ fun PreTestScreen(onBusyChange: (Boolean) -> Unit) {
         overall = ov
         report = text
         phase = PreTestPhase.REPORT
+        val methodLabel = method.label
+        val measureFile = files.lastOrNull() ?: "pretest"
+        Db.run(context, { dao ->
+            dao.insertMeasure(
+                MeasureEntity(
+                    fileName = measureFile,
+                    createdAt = System.currentTimeMillis(),
+                    kind = "pretest",
+                    method = methodLabel,
+                    noiseDb = null,
+                    snrDb = null,
+                    rmsDb = null,
+                    peakDb = null,
+                    status = ov.label,
+                    summary = text
+                )
+            )
+        }) { }
         try {
             val dir = File(context.filesDir, "reports")
             dir.mkdirs()

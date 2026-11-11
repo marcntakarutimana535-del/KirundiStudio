@@ -6,6 +6,8 @@
     <string name="tab_probe">Test micro</string>
     <string name="tab_analysis">Analyse</string>
     <string name="tab_pretest">Pré-test</string>
+    <string name="tab_library">Bibliothèque</string>
+    <string name="tab_projects">Projets</string>
 
     <!-- Pré-test (étape 4) -->
     <string name="pretest_title">PRE-RECORDING AUDIO TEST</string>

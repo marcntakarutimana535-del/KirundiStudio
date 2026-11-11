@@ -50,6 +50,8 @@ import org.kirundi.voicestudio.audio.capture.LevelInfo
 import org.kirundi.voicestudio.audio.capture.RecState
 import org.kirundi.voicestudio.audio.capture.Recorder
 import org.kirundi.voicestudio.audio.capture.formatDb
+import org.kirundi.voicestudio.data.db.Db
+import org.kirundi.voicestudio.data.db.SessionLabels
 import org.kirundi.voicestudio.data.files.RecordingStore
 import java.io.File
 import java.util.Locale
@@ -87,6 +89,10 @@ fun StudioScreen(onBusyChange: (Boolean) -> Unit) {
         )
     }
     val plannedFormat = remember { Recorder.plannedFormat(context) }
+    var activeLabel by remember { mutableStateOf("") }
+    LaunchedEffect(Unit) {
+        Db.run(context, { dao -> SessionLabels.activeLabel(context, dao) }) { activeLabel = it }
+    }
 
     LaunchedEffect(Unit) {
         val n = RecordingStore.repairAll(context)
@@ -115,6 +121,7 @@ fun StudioScreen(onBusyChange: (Boolean) -> Unit) {
                     recState = RecState.IDLE
                     message = summary.message
                     files = RecordingStore.list(context)
+                    Db.loadAll(context) { }
                 }
             }
         )
@@ -178,6 +185,8 @@ fun StudioScreen(onBusyChange: (Boolean) -> Unit) {
     ) {
         Text(text = stringResource(R.string.label_format), style = MaterialTheme.typography.labelLarge)
         Text(text = plannedFormat, fontSize = 13.sp)
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(text = activeLabel, fontSize = 13.sp)
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(text = formatTime(level.seconds), style = MaterialTheme.typography.displayMedium, fontFamily = FontFamily.Monospace)
