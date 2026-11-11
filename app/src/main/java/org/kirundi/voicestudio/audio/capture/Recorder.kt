@@ -86,6 +86,8 @@ class Recorder(private val context: Context) {
             }
         }
 
+        fun plannedBits(context: Context): Int = if (announces24(pickInput(context))) 24 else 16
+
         fun sourceName(choice: Int): String = when (choice) {
             0 -> "UNPROCESSED"
             1 -> "VOICE_RECOGNITION"

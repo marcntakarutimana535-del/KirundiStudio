@@ -5,6 +5,24 @@
     <string name="tab_studio">Studio</string>
     <string name="tab_probe">Test micro</string>
     <string name="tab_analysis">Analyse</string>
+    <string name="tab_pretest">Pré-test</string>
+
+    <!-- Pré-test (étape 4) -->
+    <string name="pretest_title">PRE-RECORDING AUDIO TEST</string>
+    <string name="pretest_intro">Test guidé en 4 étapes : 1) microphone, 2) silence, 3) voix, 4) rapport. Placez le téléphone à la position exacte de l\'enregistrement réel, dans une pièce calme.</string>
+    <string name="pretest_silence_len">Durée du test de silence</string>
+    <string name="pretest_accept16">Le client accepte le 16 bits natif (à confirmer avec Voices.com)</string>
+    <string name="btn_start_test">Commencer le test</string>
+    <string name="step1_checking">Étape 1/4 : test du microphone en cours...</string>
+    <string name="step2_title">Étape 2/4 : test du silence</string>
+    <string name="step2_text">Restez complètement silencieux et immobile, sans toucher le téléphone, pendant toute la durée du test.</string>
+    <string name="btn_start_silence">Démarrer le test de silence</string>
+    <string name="step3_title">Étape 3/4 : test de la voix</string>
+    <string name="step3_text">Lisez à voix haute, sans interruption, une phrase longue de votre texte réel, à la distance et au volume que vous utiliserez pour enregistrer (environ 10 secondes).</string>
+    <string name="btn_start_voice">Démarrer le test de la voix</string>
+    <string name="step4_title">Étape 4/4 : rapport</string>
+    <string name="btn_redo">Refaire le test</string>
+    <string name="progress_text">%1$.1f s / %2$.0f s</string>
 
     <!-- Analyse (étape 3) -->
     <string name="label_pick_file">Fichier à analyser</string>

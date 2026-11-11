@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.getValue
@@ -18,7 +18,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import org.kirundi.voicestudio.ui.AnalysisScreen
+import org.kirundi.voicestudio.ui.PreTestScreen
 import org.kirundi.voicestudio.ui.ProbeScreen
 import org.kirundi.voicestudio.ui.StudioScreen
 
@@ -33,30 +35,27 @@ class MainActivity : ComponentActivity() {
                 ) {
                     var tab by remember { mutableStateOf(0) }
                     var busy by remember { mutableStateOf(false) }
+                    val titles = listOf(
+                        stringResource(R.string.tab_studio),
+                        stringResource(R.string.tab_pretest),
+                        stringResource(R.string.tab_analysis),
+                        stringResource(R.string.tab_probe)
+                    )
                     Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
-                        TabRow(selectedTabIndex = tab) {
-                            Tab(
-                                selected = tab == 0,
-                                onClick = { tab = 0 },
-                                enabled = !busy,
-                                text = { Text(stringResource(R.string.tab_studio)) }
-                            )
-                            Tab(
-                                selected = tab == 1,
-                                onClick = { tab = 1 },
-                                enabled = !busy,
-                                text = { Text(stringResource(R.string.tab_analysis)) }
-                            )
-                            Tab(
-                                selected = tab == 2,
-                                onClick = { tab = 2 },
-                                enabled = !busy,
-                                text = { Text(stringResource(R.string.tab_probe)) }
-                            )
+                        ScrollableTabRow(selectedTabIndex = tab, edgePadding = 8.dp) {
+                            for (i in titles.indices) {
+                                Tab(
+                                    selected = tab == i,
+                                    onClick = { tab = i },
+                                    enabled = !busy,
+                                    text = { Text(titles[i]) }
+                                )
+                            }
                         }
                         when (tab) {
                             0 -> StudioScreen(onBusyChange = { busy = it })
-                            1 -> AnalysisScreen()
+                            1 -> PreTestScreen(onBusyChange = { busy = it })
+                            2 -> AnalysisScreen()
                             else -> ProbeScreen()
                         }
                     }

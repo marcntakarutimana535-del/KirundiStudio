@@ -84,7 +84,8 @@ object NoiseEvaluator {
         seconds: Double,
         clipEvents: Int,
         windowSeconds: Double,
-        settings: AnalysisSettings
+        settings: AnalysisSettings,
+        requireVoice: Boolean = true
     ): NoiseAssessment {
         val n = rmsDb.size
         val ref = if (n == 0) Double.NaN else max(percentile(rmsDb.toList(), 10.0), -120.0)
@@ -187,7 +188,7 @@ object NoiseEvaluator {
                 reasons.add(
                     "Bruit mesuré ${dbText(noiseValue)}, au-dessus de la cible ${dbText(settings.targetDb)}."
                 )
-            } else {
+            } else if (requireVoice) {
                 if (voice == 0) {
                     check = true
                     reasons.add(
