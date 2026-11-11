@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import org.kirundi.voicestudio.ui.AnalysisScreen
 import org.kirundi.voicestudio.ui.ProbeScreen
 import org.kirundi.voicestudio.ui.StudioScreen
 
@@ -44,13 +45,19 @@ class MainActivity : ComponentActivity() {
                                 selected = tab == 1,
                                 onClick = { tab = 1 },
                                 enabled = !busy,
+                                text = { Text(stringResource(R.string.tab_analysis)) }
+                            )
+                            Tab(
+                                selected = tab == 2,
+                                onClick = { tab = 2 },
+                                enabled = !busy,
                                 text = { Text(stringResource(R.string.tab_probe)) }
                             )
                         }
-                        if (tab == 0) {
-                            StudioScreen(onBusyChange = { busy = it })
-                        } else {
-                            ProbeScreen()
+                        when (tab) {
+                            0 -> StudioScreen(onBusyChange = { busy = it })
+                            1 -> AnalysisScreen()
+                            else -> ProbeScreen()
                         }
                     }
                 }

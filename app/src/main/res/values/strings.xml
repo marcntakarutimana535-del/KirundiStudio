@@ -4,6 +4,20 @@
 
     <string name="tab_studio">Studio</string>
     <string name="tab_probe">Test micro</string>
+    <string name="tab_analysis">Analyse</string>
+
+    <!-- Analyse (étape 3) -->
+    <string name="label_pick_file">Fichier à analyser</string>
+    <string name="no_recordings">Aucun enregistrement à analyser. Enregistrez d\'abord dans l\'onglet Studio.</string>
+    <string name="btn_analyze">Analyser</string>
+    <string name="analyzing">Analyse en cours...</string>
+    <string name="label_noise_method">Méthode de mesure du bruit</string>
+    <string name="label_params">Paramètres (modifiables)</string>
+    <string name="param_target">Cible de bruit (au plus)</string>
+    <string name="param_voice_margin">Seuil voix (au-dessus du bruit de référence)</string>
+    <string name="param_silence_margin">Seuil silence (au-dessus du bruit de référence)</string>
+    <string name="legend_chart1">Niveau par fenêtre de 100 ms : bleu = RMS, gris = Peak, ligne rouge = cible de bruit</string>
+    <string name="legend_chart2">Évolution du bruit : fenêtres calmes seules (RMS)</string>
 
     <!-- Test micro (étape 1) -->
     <string name="step1_title">Étape 1 : détection des micros</string>
